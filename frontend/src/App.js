@@ -93,9 +93,9 @@
 // export default App;
 import './App.css';
 import React, { useState, useEffect } from 'react';
-import { ethers } from 'ethers';
+// import { ethers } from 'ethers';
 
-import logo from './assets/logo.png'; // Make sure this path is correct
+import logo from './assets/logo.png'; // Ensure the logo path is correct
 
 import RegisterFarmer from './components/RegisterFarmer';
 import CreateBatch from './components/CreateBatch';
@@ -110,7 +110,6 @@ function App() {
   const [account, setAccount] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
 
-  // Check if wallet is connected
   useEffect(() => {
     const checkWallet = async () => {
       if (window.ethereum) {
@@ -123,12 +122,31 @@ function App() {
         } catch (error) {
           console.error("Wallet connection error:", error);
         }
+  
+        // Listen for account change
+        window.ethereum.on("accountsChanged", () => {
+          window.location.reload();
+        });
+  
+        // Listen for network change
+        window.ethereum.on("chainChanged", () => {
+          window.location.reload();
+        });
       }
     };
+  
     checkWallet();
+  
+    // Cleanup listeners on component unmount
+    return () => {
+      if (window.ethereum?.removeListener) {
+        window.ethereum.removeListener("accountsChanged", () => {});
+        window.ethereum.removeListener("chainChanged", () => {});
+      }
+    };
   }, []);
+  
 
-  // Manual connect wallet
   const connectWallet = async () => {
     if (window.ethereum) {
       try {
@@ -203,6 +221,7 @@ function App() {
       <nav className="bg-white shadow px-6 py-4 flex justify-between items-center flex-wrap">
         <div className="flex items-center space-x-4">
           <img src={logo} alt="Logo" className="w-10 h-10 rounded-full" />
+          
           <span className="font-bold text-xl text-green-700">FarmTrack</span>
         </div>
 
@@ -241,4 +260,3 @@ function App() {
 }
 
 export default App;
-
