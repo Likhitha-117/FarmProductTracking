@@ -10,7 +10,7 @@ try {
   if (Array.isArray(contractArtifact)) {
     // ABI is a pure array
     CONTRACT_ABI = contractArtifact;
-    CONTRACT_ADDRESS = "0x699152D2051d2035559b378214A0b71E1aE79F38";
+    CONTRACT_ADDRESS = "0x2793C6937A1A44e514D31B52e2897e2C83E754D9";
   } else {
     CONTRACT_ABI = contractArtifact.abi;
     CONTRACT_ADDRESS = contractArtifact.networks["5777"].address;
